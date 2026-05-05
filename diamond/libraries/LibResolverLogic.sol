@@ -174,8 +174,8 @@ library LibResolverLogic {
         uint64 user
     ) private view returns (LibTypes.UserTokenInfo memory info) {
         uint32 level = rs.registeredTokens[rs.owners[user]].level;
-        LibTypes.NFT memory token = ps.regularTypes[level];
         if (rs.registeredTokens[rs.owners[user]].typeNFT == LibTypes.TypeNFT.REGULAR) {
+            LibTypes.NFT memory token = ps.regularTypes[level];
             info.tokenId = rs.owners[user];
             info.accumulativePercent = ps.parameters.accumulativePercent;
             info.price = token.price;
