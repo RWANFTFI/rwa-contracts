@@ -18,12 +18,17 @@ import {LibTreeLogic} from "./LibTreeLogic.sol";
 import {LibMarketingLogic} from "./LibMarketingLogic.sol";
 import {LibFarmingLogic} from "./LibFarmingLogic.sol";
 import {LibVoucherLogic} from "./LibVoucherLogic.sol";
+import {LibUtility} from "./LibUtility.sol";
 
 library LibPaymentLogic {
     using SafeERC20 for IERC20;
     using Strings for uint256;
 
-    function deposit(uint256 amount) internal {
+    function deposit(uint256 amount, uint256 nonce, bytes calldata signature) internal {
+        bytes32 structHash = keccak256(
+            abi.encode(LibSignatureLogic.DEPOSIT_REQUEST_TYPEHASH, msg.sender, amount, nonce)
+        );
+        LibSignatureLogic.verify(structHash, signature);
         LibMarketingStorage.MarketingStorage storage ms = LibMarketingStorage.marketingStorage();
         LibDiamond.DiamondStorage storage ds = LibDiamond.diamondStorage();
 
@@ -59,6 +64,7 @@ library LibPaymentLogic {
         bytes calldata signature
     ) internal {
         if (block.timestamp > deadline) revert LibErrors.DeadlineExpired();
+        if (LibUtility.checkSanctioned(to)) revert LibErrors.UserSanctioned(to);
 
         LibMarketingStorage.MarketingStorage storage ms = LibMarketingStorage.marketingStorage();
         LibParametersStorage.ParametersStorage storage ps = LibParametersStorage.parametersStorage();
@@ -333,6 +339,8 @@ library LibPaymentLogic {
     }
 
     function depositToUser(address user, uint256 amount, string memory source) internal {
+        if (LibUtility.checkSanctioned(user)) revert LibErrors.UserSanctioned(user);
+
         LibMarketingStorage.MarketingStorage storage ms = LibMarketingStorage.marketingStorage();
         LibDiamond.DiamondStorage storage ds = LibDiamond.diamondStorage();
 

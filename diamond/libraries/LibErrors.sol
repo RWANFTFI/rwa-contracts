@@ -43,6 +43,7 @@ library LibErrors {
     error WrongValue();
     error WrongTxFee();
     error UserBanned();
+    error UserSanctioned(address user);
     error TooEarly();
     error NoFreezes();
 

@@ -23,4 +23,8 @@ library LibConstants {
 
     uint256 public constant VOTES_DECAY_TIME = 31 days;
     uint256 public constant VOTES_GRACE_PERIOD = 7 days;
+
+    // CONTRACTS
+
+    bytes32 public constant SANCTIONS_CONTRACT = keccak256("SANCTIONS_CONTRACT");
 }

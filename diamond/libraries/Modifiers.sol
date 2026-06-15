@@ -5,6 +5,8 @@ import {LibDiamond} from "../libraries/LibDiamond.sol";
 import {LibMarketingStorage} from "../storage/LibMarketingStorage.sol";
 import {LibTypes} from "../libraries/LibTypes.sol";
 import {LibErrors} from "../libraries/LibErrors.sol";
+import {LibConstants} from "./LibConstants.sol";
+import {LibUtility} from "./LibUtility.sol";
 
 contract Modifiers {
     modifier onlySelf() {
@@ -20,6 +22,8 @@ contract Modifiers {
 
     modifier notBanned() {
         LibMarketingStorage.MarketingStorage storage ms = LibMarketingStorage.marketingStorage();
+        LibDiamond.DiamondStorage storage ds = LibDiamond.diamondStorage();
+        if (LibUtility.checkSanctioned(msg.sender)) revert LibErrors.UserSanctioned(msg.sender);
         if (ms.users[ms.identity.userToId[msg.sender]].isBanned) revert LibErrors.UserBanned();
         _;
     }

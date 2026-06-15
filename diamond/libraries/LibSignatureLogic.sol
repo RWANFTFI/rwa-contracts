@@ -20,6 +20,7 @@ library LibSignatureLogic {
         keccak256("TransferVoucher(address sender,address to,uint256 tokenId,uint256 nonce)");
     bytes32 public constant TRANSFER_ACCUMULATIVE_REQUEST_TYPEHASH =
         keccak256("TransferAccumulative(address sender,address to,uint256 amount,uint256 deadline,uint256 nonce)");
+    bytes32 public constant DEPOSIT_REQUEST_TYPEHASH = keccak256("Deposit(address sender,uint256 amount,uint256 nonce)");
 
     function domainSeparatorV4() internal view returns (bytes32) {
         return LibDiamond.diamondStorage().domainSeparator;

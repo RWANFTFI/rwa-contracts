@@ -131,7 +131,7 @@ contract AdminFacet is Modifiers {
 
     /// Enable or disable 2FA
     /// @param status new status
-    function signatureVerifyStatus(bool status) external onlyRole(LibConstants.SECURED_ROLE) {
+    function signatureVerifyStatus(bool status) external onlyDAO {
         LibSignatureLogic.signatureVerifyStatus(status);
     }
 }

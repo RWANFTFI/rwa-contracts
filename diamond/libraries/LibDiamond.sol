@@ -43,6 +43,7 @@ library LibDiamond {
         bytes32 domainSeparator;
         uint256 reentrancyStatus;
         bool signatureVerify;
+        mapping(bytes32 => address) additionalContracts;
     }
 
     function diamondStorage() internal pure returns (DiamondStorage storage ds) {

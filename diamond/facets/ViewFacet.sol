@@ -132,4 +132,8 @@ contract ViewFacet {
     function getConstants() external pure returns(LibTypes.Constants memory) {
         return LibParametersLogic.getConstants();
     }
+
+    function getAdditionalContract(string calldata name) external view returns(address) {
+        return LibDiamond.diamondStorage().additionalContracts[keccak256(abi.encodePacked(name))];
+    }
 }

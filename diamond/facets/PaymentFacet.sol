@@ -11,8 +11,10 @@ contract PaymentFacet is Modifiers {
 
     /// Deposit USDT to inner balance
     /// @param amount amount of USDT to deposit
-    function deposit(uint256 amount) external payable notBanned payFee {
-        LibPaymentLogic.deposit(amount);
+    /// @param nonce number used once
+    /// @param signature signature from signer
+    function deposit(uint256 amount, uint256 nonce, bytes calldata signature) external payable notBanned payFee {
+        LibPaymentLogic.deposit(amount, nonce, signature);
     }
 
     /// Withdraw inner (not accumulative) balance

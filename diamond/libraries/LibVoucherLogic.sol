@@ -12,6 +12,7 @@ import {LibMarketingLogic} from "../libraries/LibMarketingLogic.sol";
 import {LibTypes} from "./LibTypes.sol";
 import {LibErrors} from "./LibErrors.sol";
 import {LibEvents} from "./LibEvents.sol";
+import {LibUtility} from "./LibUtility.sol";
 
 library LibVoucherLogic {
     function createVoucher(uint256 paid) internal returns (uint256) {
@@ -58,6 +59,7 @@ library LibVoucherLogic {
     }
 
     function transferVoucher(address to, uint256 tokenId, uint256 nonce, bytes calldata signature) internal {
+        if (LibUtility.checkSanctioned(to)) revert LibErrors.UserSanctioned(to);
         LibDiamond.DiamondStorage storage ds = LibDiamond.diamondStorage();
         LibResolverStorage.ResolverStorage storage rs = LibResolverStorage.resolverStorage();
 

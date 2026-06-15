@@ -13,6 +13,7 @@ import {LibTypes} from "./LibTypes.sol";
 import {LibErrors} from "./LibErrors.sol";
 import {LibEvents} from "./LibEvents.sol";
 import {ITokenReserve} from "../../interfaces/ITokenReserve.sol";
+import {LibUtility} from "./LibUtility.sol";
 
 library LibResolverLogic {
     function _giftUpgrade(uint64 ownerId, uint256 tokenId, uint32 level) private returns (uint256) {
@@ -153,6 +154,7 @@ library LibResolverLogic {
     }
 
     function giftNFT(address to, uint256 tokenId, uint256 nonce, bytes calldata signature) internal {
+        if (LibUtility.checkSanctioned(to)) revert LibErrors.UserSanctioned(to);
         LibParametersStorage.ParametersStorage storage ps = LibParametersStorage.parametersStorage();
         LibDiamond.DiamondStorage storage ds = LibDiamond.diamondStorage();
         LibResolverStorage.ResolverStorage storage rs = LibResolverStorage.resolverStorage();
@@ -273,6 +275,7 @@ library LibResolverLogic {
     }
 
     function changeUserAddress(address newOwner, address oldOwner) internal {
+        if (LibUtility.checkSanctioned(newOwner)) revert LibErrors.UserSanctioned(newOwner);
         LibMarketingStorage.MarketingStorage storage ms = LibMarketingStorage.marketingStorage();
         LibResolverStorage.ResolverStorage storage rs = LibResolverStorage.resolverStorage();
         LibParametersStorage.ParametersStorage storage ps = LibParametersStorage.parametersStorage();
